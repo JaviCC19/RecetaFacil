@@ -51,7 +51,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RecetasRoute(
-    onRecetaClick: (String) -> Unit,
+    onRecetaClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecetasViewModel = viewModel()
 ) {
@@ -78,7 +78,7 @@ fun RecetasRoute(
                 onFiltrarFavoritos = { viewModel.toggleFiltroFavoritos() },
                 onFiltrarTiempo = { viewModel.toggleFiltroPorTiempo() },
                 filtroFavoritosActivo = uiState.filtroFavoritos,
-                filtroTiempoActivo = uiState.filtroPorTiempo
+                filtroTiempoActivo = uiState.filtroPorTiempo,
             )
         }
     }
@@ -121,13 +121,13 @@ fun Filtros(
 @Composable
 fun RecetasScreen(
     recetas: List<Receta>,
-    onRecetaClick: (String) -> Unit,
+    onRecetaClick: (Int) -> Unit,
     onToggleFavorite: (Receta) -> Unit,
     modifier: Modifier = Modifier,
     onFiltrarFavoritos: () -> Unit,
     onFiltrarTiempo: () -> Unit,
     filtroFavoritosActivo: Boolean,
-    filtroTiempoActivo: Boolean
+    filtroTiempoActivo: Boolean,
 ) {
     Scaffold(
         topBar = {
