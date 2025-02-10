@@ -1,4 +1,4 @@
-package com.myproject.JavierCifuentes.Data.DataStore
+package com.myproject.JavierCifuentes.Data.local.DataStore
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.myproject.JavierCifuentes.Data.DataStore.DataStoreManager
+import com.myproject.JavierCifuentes.Data.local.DataStore.DataStoreManager
 import com.myproject.JavierCifuentes.R
 import kotlinx.coroutines.launch
 
