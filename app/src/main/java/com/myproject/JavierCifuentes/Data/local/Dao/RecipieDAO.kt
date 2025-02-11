@@ -18,6 +18,9 @@ interface RecipieDAO {
     @Query("DELETE FROM RecetaEntity WHERE id = :id")
     suspend fun deleteReceta(id: Int)
 
+    @Query("SELECT * FROM recetaentity WHERE id = :id LIMIT 1")
+    suspend fun getRecetaById(id: Int): RecetaEntity?
+
     @Insert
     suspend fun insertReceta(receta: RecetaEntity)
 

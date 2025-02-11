@@ -11,8 +11,8 @@ data class RecetaEntity(
     val nombre: String,
     val descripcion: String,
     val imagenRes: Int,
-    val ingredientes: List<String>,
-    val pasos: List<String>,
+    val ingredientes: String?,
+    val pasos: String?,
     val isFavorite: Boolean = false,
     val tiempo: Int
 )
@@ -20,12 +20,12 @@ data class RecetaEntity(
 
 fun RecetaEntity.mapToModel(): Receta {
     return Receta(
-        id = this.id,
-        nombre = this.nombre,
-        descripcion = this.descripcion,
-        imagenRes = this.imagenRes,
-        ingredientes = this.ingredientes,
-        pasos = this.pasos,
+        id = id,
+        nombre = nombre,
+        descripcion = descripcion,
+        imagenRes = imagenRes,
+        ingredientes = ingredientes ?: "No se inseraron ingredientes",
+        pasos = pasos ?: "No se insertaron pasos",
         isFavorite = this.isFavorite,
         tiempo = this.tiempo
     )
@@ -33,13 +33,13 @@ fun RecetaEntity.mapToModel(): Receta {
 
 fun Receta.mapToEntity(): RecetaEntity {
     return RecetaEntity(
-        id = this.id,
-        nombre = this.nombre,
-        descripcion = this.descripcion,
-        imagenRes = this.imagenRes,
-        ingredientes = this.ingredientes,
-        pasos = this.pasos,
-        isFavorite = this.isFavorite,
-        tiempo = this.tiempo
+        id = id,
+        nombre = nombre,
+        descripcion = descripcion,
+        imagenRes = imagenRes,
+        ingredientes = ingredientes,
+        pasos = pasos,
+        isFavorite = isFavorite,
+        tiempo = tiempo
     )
 }

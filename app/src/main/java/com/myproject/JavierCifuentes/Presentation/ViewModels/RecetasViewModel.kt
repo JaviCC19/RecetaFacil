@@ -58,7 +58,7 @@ class RecetasViewModel(
         _filtroTiempo.value = !_filtroTiempo.value
     }
 
-    fun addReceta(nombre: String, descripcion: String, ingredientes: List<String>, pasos: List<String>, tiempo: Int) {
+    fun addReceta(nombre: String, descripcion: String, ingredientes: String, pasos: String, tiempo: Int) {
         viewModelScope.launch {
             val nuevaReceta = Receta(
                 id = 0,

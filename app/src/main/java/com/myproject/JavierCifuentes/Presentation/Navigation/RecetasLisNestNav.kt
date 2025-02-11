@@ -25,6 +25,10 @@ fun NavGraphBuilder.recetasListScreen2(
 
         recetaDetailScreen(onNavigateBack = {
             navController.navigateUp()
+        }
+        )
+        newReceta(onNavigateBack = {
+            navController.navigateUp()
         })
     }
 }

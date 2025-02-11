@@ -1,5 +1,6 @@
 package com.myproject.JavierCifuentes.Presentation.Screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
@@ -40,11 +42,12 @@ import androidx.compose.ui.unit.sp
 import com.myproject.JavierCifuentes.Data.local.Domain.Receta
 import com.myproject.JavierCifuentes.Presentation.ViewModels.RecetasViewModel
 
+
 @Composable
 fun RecetasRoute(
     onRecetaClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: RecetasViewModel = viewModel()
+    viewModel: RecetasViewModel = viewModel(factory = RecetasViewModel.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val filtroFavoritos by viewModel.filtroFavoritos.collectAsState()
@@ -67,6 +70,7 @@ fun RecetasRoute(
                 recetas = recetasFiltradas,
                 onRecetaClick = onRecetaClick,
                 onToggleFavorite = { viewModel.toggleFavorite(it) },
+                onDeleteReceta = { viewModel.deleteReceta(it.id) },
                 modifier = modifier,
                 onFiltrarFavoritos = { viewModel.toggleFiltroFavoritos() },
                 onFiltrarTiempo = { viewModel.toggleFiltroPorTiempo() },
@@ -116,6 +120,7 @@ fun RecetasScreen(
     recetas: List<Receta>,
     onRecetaClick: (Int) -> Unit,
     onToggleFavorite: (Receta) -> Unit,
+    onDeleteReceta: (Receta) -> Unit,
     modifier: Modifier = Modifier,
     onFiltrarFavoritos: () -> Unit,
     onFiltrarTiempo: () -> Unit,
@@ -151,18 +156,25 @@ fun RecetasScreen(
 
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(recetas) { receta ->
-                    RecetaCard(receta, onToggleFavorite, onRecetaClick)
+                    RecetaCard(receta, onToggleFavorite, onDeleteReceta, onRecetaClick)
                 }
             }
         }
     }
 }
 
+
 @Composable
-fun RecetaCard(receta: Receta, onToggleFavorite: (Receta) -> Unit, onClick: (Int) -> Unit) {
+fun RecetaCard(
+    receta: Receta,
+    onToggleFavorite: (Receta) -> Unit,
+    onDeleteReceta: (Receta) -> Unit,
+    onClick: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick(receta.id) }
             .padding(8.dp),
         elevation = CardDefaults.elevatedCardElevation()
     ) {
@@ -194,11 +206,17 @@ fun RecetaCard(receta: Receta, onToggleFavorite: (Receta) -> Unit, onClick: (Int
                         tint = if (receta.isFavorite) Color.Yellow else Color.Gray
                     )
                 }
+                IconButton(onClick = { onDeleteReceta(receta) }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Eliminar receta",
+                        tint = Color.Red
+                    )
+                }
             }
         }
     }
 }
-
 
 
 
