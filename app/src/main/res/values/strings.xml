@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ReceFacil</string>
+    <string name="login">Login</string>
+    <string name="password">Ingrese la contraseña</string>
+    <string name="user">Ingrese su usuario</string>
+    <string name="Create">Crea tu nueva receta</string>
 </resources>

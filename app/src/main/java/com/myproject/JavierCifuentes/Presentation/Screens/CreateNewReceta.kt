@@ -22,11 +22,9 @@ import com.myproject.JavierCifuentes.Presentation.ViewModels.CreateRecetaViewMod
 
 @Composable
 fun CrearRecetaRoute(
-    viewModel: CreateRecetaViewModel = viewModel(),
+    viewModel: CreateRecetaViewModel = viewModel(factory = CreateRecetaViewModel.Factory),
     onNavigateBack: () -> Unit
 ) {
-
-
     CrearRecetaScreen(
         viewModel = viewModel,
         onSave = {
@@ -35,6 +33,7 @@ fun CrearRecetaRoute(
         }
     )
 }
+
 
 
 

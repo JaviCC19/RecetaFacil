@@ -35,17 +35,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.myproject.JavierCifuentes.Data.local.Domain.Receta
 import com.myproject.JavierCifuentes.Presentation.ViewModels.RecetasViewModel
+import com.myproject.JavierCifuentes.R
 
 
 @Composable
 fun RecetasRoute(
     onRecetaClick: (Int) -> Unit,
+    onCrearRecetaClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecetasViewModel = viewModel(factory = RecetasViewModel.Factory)
 ) {
@@ -63,7 +66,16 @@ fun RecetasRoute(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "No hay recetas todavía", style = MaterialTheme.typography.bodyLarge)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "No hay recetas todavía",
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Button(onClick = onCrearRecetaClick) {
+                        Text(text = "Crear nueva receta")
+                    }
+                }
             }
         } else {
             RecetasScreen(
@@ -76,6 +88,7 @@ fun RecetasRoute(
                 onFiltrarTiempo = { viewModel.toggleFiltroPorTiempo() },
                 filtroFavoritosActivo = filtroFavoritos,
                 filtroTiempoActivo = filtroTiempo,
+                onCrearRecetaClick = onCrearRecetaClick
             )
         }
     }
@@ -109,7 +122,7 @@ fun Filtros(
                 containerColor = if (filtroTiempoActivo) Color.Green else Color.Gray
             )
         ) {
-            Text(text = "Ordenar por tiempo")
+            Text(text = stringResource(R.string.Create))
         }
     }
 }
@@ -126,6 +139,7 @@ fun RecetasScreen(
     onFiltrarTiempo: () -> Unit,
     filtroFavoritosActivo: Boolean,
     filtroTiempoActivo: Boolean,
+    onCrearRecetaClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -139,7 +153,7 @@ fun RecetasScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Agregar nueva receta */ },
+                onClick = onCrearRecetaClick,
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Agregar receta")

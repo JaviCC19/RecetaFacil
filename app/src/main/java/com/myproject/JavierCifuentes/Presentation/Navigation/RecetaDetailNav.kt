@@ -8,25 +8,24 @@ import com.myproject.JavierCifuentes.Presentation.Screens.RecetaDetailRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RecetaDetailDestination(
-    val id: Int
+data class RecetaDetailDestination(val id: Int)
+
+fun NavGraphBuilder.recetaDetailScreen(
+    onNavigateBack: () -> Unit
 ) {
-
-}
-
- fun NavController.navigateToRecetaDetailScreen(
-    destination: RecetaDetailDestination,
-    navOptions: NavOptions? = null
- ){
-     this.navigate(destination, navOptions)
- }
-
-fun NavGraphBuilder.recetaDetailScreen(onNavigateBack: () -> Unit){
     composable<RecetaDetailDestination> { backStackEntry ->
-        val destination: RecetaDetailDestination = backStackEntry.arguments?.getSerializable("destination") as RecetaDetailDestination
-        RecetaDetailRoute(
-            id = destination.id,
-            onNavigateBack = onNavigateBack
-        )
+        val id = backStackEntry.arguments?.getInt("id")
+        if (id != null) {
+            RecetaDetailRoute(
+                id = id,
+                onNavigateBack = onNavigateBack
+            )
+        }
     }
 }
+
+
+fun NavController.navigateToRecetaDetailScreen(id: Int, navOptions: NavOptions? = null) {
+    this.navigate(RecetaDetailDestination(id), navOptions)
+}
+

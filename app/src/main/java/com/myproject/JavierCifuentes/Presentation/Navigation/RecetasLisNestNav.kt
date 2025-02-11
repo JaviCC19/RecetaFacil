@@ -15,20 +15,27 @@ fun NavGraphBuilder.recetasListScreen2(
     navController: NavController,
     onBackToLogin: () -> Unit
 ) {
-    navigation<RecetasListDestiantion2>(RecetasListDestination) {
+    navigation<RecetasListDestiantion2>(startDestination = RecetasListDestination) {
         recetasListScreen(
             onRecetaClick = { id ->
-                navController.navigateToRecetaDetailScreen(RecetaDetailDestination(id))
+                navController.navigateToRecetaDetailScreen(id)
             },
-            onBackToLogin = onBackToLogin
+            onBackToLogin = onBackToLogin,
+            onCrearRecetaClick = {
+                navController.navigateNewReceta()
+            }
         )
 
-        recetaDetailScreen(onNavigateBack = {
-            navController.navigateUp()
-        }
+        recetaDetailScreen(
+            onNavigateBack = {
+                navController.navigateUp()
+            }
         )
-        newReceta(onNavigateBack = {
-            navController.navigateUp()
-        })
+
+        newReceta(
+            onNavigateBack = {
+                navController.navigateUp()
+            }
+        )
     }
 }

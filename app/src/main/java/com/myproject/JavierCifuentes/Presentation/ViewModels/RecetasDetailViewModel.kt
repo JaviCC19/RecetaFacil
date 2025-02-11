@@ -1,62 +1,40 @@
 package com.myproject.JavierCifuentes.Presentation.ViewModels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import com.myproject.JavierCifuentes.Data.local.Dao.RecipieDAO
-import com.myproject.JavierCifuentes.Data.local.Domain.Receta
-import com.myproject.JavierCifuentes.Data.local.Entity.RecetaEntity
-import com.myproject.JavierCifuentes.Data.local.Entity.mapToModel
-
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.myproject.JavierCifuentes.Data.local.repositories.RecetaRepository
+import com.myproject.JavierCifuentes.Domain.Di.RoomDependencies
+import com.myproject.JavierCifuentes.Presentation.States.RecetaDetailsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CreateRecetaViewModel(private val recipieDAO: RecipieDAO) : ViewModel() {
+class RecetasDetailViewModel(private val recetaRepository: RecetaRepository) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<Receta?>(null)
-    val uiState: StateFlow<Receta?> = _uiState.asStateFlow()
-
-    var nombre by mutableStateOf("")
-    var descripcion by mutableStateOf("")
-    var imagenRes by mutableStateOf(0)
-    var ingredientes by mutableStateOf("")
-    var pasos by mutableStateOf("")
-    var tiempo by mutableStateOf(0)
-    var isFavorite by mutableStateOf(false)
-
-    fun saveReceta() {
-        viewModelScope.launch {
-            val nuevaReceta = RecetaEntity(
-                nombre = nombre,
-                descripcion = descripcion,
-                imagenRes = imagenRes,
-                ingredientes = ingredientes,
-                pasos = pasos,
-                tiempo = tiempo,
-                isFavorite = isFavorite
-            )
-            recipieDAO.insertReceta(nuevaReceta)
-        }
-    }
+    private val _uiState = MutableStateFlow(RecetaDetailsState())
+    val uiState: StateFlow<RecetaDetailsState> = _uiState
 
     fun loadRecetaDetail(recetaId: Int) {
         viewModelScope.launch {
-            val receta = recipieDAO.getRecetaById(recetaId)
-            receta?.let {
-                nombre = it.nombre
-                descripcion = it.descripcion
-                imagenRes = it.imagenRes
-                ingredientes = it.ingredientes ?: ""
-                pasos = it.pasos ?: ""
-                tiempo = it.tiempo
-                isFavorite = it.isFavorite
+            val receta = recetaRepository.getRecetaById(recetaId)
+            _uiState.value = RecetaDetailsState(receta)
+        }
+    }
 
-                _uiState.value = it.mapToModel()
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = checkNotNull(this[APPLICATION_KEY])
+                val db = RoomDependencies.provideDatabase(application)
+                val repository = RecetaRepository(db.recipieDAO())
+                RecetasDetailViewModel(repository)
             }
         }
     }
 }
+
+

@@ -20,6 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,20 +33,38 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.myproject.JavierCifuentes.Data.local.Domain.Receta
+
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.myproject.JavierCifuentes.Data.local.Entity.RecetaEntity
+import com.myproject.JavierCifuentes.Presentation.ViewModels.RecetasDetailViewModel
+
 
 @Composable
 fun RecetaDetailRoute(
     id: Int,
-    onNavigateBack: () -> Unit
-) {}
+    onNavigateBack: () -> Unit,
+    viewModel: RecetasDetailViewModel = viewModel(factory = RecetasDetailViewModel.Factory)
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(id) {
+        viewModel.loadRecetaDetail(id)
+    }
+
+    uiState.data?.let { receta ->
+        RecetaDetalleScreen(
+            receta = receta,
+            onBackClick = onNavigateBack
+        )
+    }
+}
 
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecetaDetalleScreen(
-    receta: Receta,
+    receta: RecetaEntity,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

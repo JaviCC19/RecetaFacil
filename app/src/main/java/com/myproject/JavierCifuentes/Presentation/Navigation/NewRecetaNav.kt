@@ -27,3 +27,7 @@ fun NavGraphBuilder.newReceta(
         )
     }
 }
+
+fun NavController.navigateNewReceta(navOptions: NavOptions? = null) {
+    this.navigate(NewRecetaDestination, navOptions)
+}

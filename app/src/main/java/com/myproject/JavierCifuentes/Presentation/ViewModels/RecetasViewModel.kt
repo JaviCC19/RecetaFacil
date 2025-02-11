@@ -58,20 +58,7 @@ class RecetasViewModel(
         _filtroTiempo.value = !_filtroTiempo.value
     }
 
-    fun addReceta(nombre: String, descripcion: String, ingredientes: String, pasos: String, tiempo: Int) {
-        viewModelScope.launch {
-            val nuevaReceta = Receta(
-                id = 0,
-                nombre = nombre,
-                descripcion = descripcion,
-                imagenRes = 0,
-                ingredientes = ingredientes,
-                pasos = pasos,
-                tiempo = tiempo
-            )
-            recetaDao.insertReceta(nuevaReceta.mapToEntity())
-        }
-    }
+
 
     fun deleteReceta(id: Int) {
         viewModelScope.launch {

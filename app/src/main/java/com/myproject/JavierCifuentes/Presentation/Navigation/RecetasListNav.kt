@@ -14,12 +14,14 @@ data object RecetasListDestination
 
 fun NavGraphBuilder.recetasListScreen(
     onRecetaClick: (Int) -> Unit,
-    onBackToLogin: () -> Unit
+    onBackToLogin: () -> Unit,
+    onCrearRecetaClick: () -> Unit
 ) {
     composable<RecetasListDestination> {
         RecetasRoute(
             onRecetaClick = onRecetaClick,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            onCrearRecetaClick = onCrearRecetaClick
         )
         BackHandler {
             onBackToLogin()
