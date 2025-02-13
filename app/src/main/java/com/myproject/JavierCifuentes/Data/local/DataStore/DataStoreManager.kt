@@ -34,4 +34,5 @@ class DataStoreManager(private val context: Context) {
             preferences.remove(UserPreferencesKeys.USER_NAME)
         }
     }
+
 }

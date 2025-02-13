@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.myproject.JavierCifuentes.Data.local.DataStore.DataStoreManager
@@ -25,6 +27,7 @@ import com.myproject.JavierCifuentes.Presentation.Navigation.LoginDestination
 import com.myproject.JavierCifuentes.Presentation.Navigation.RecetasListDestiantion2
 import com.myproject.JavierCifuentes.Presentation.Navigation.loginScreen
 import com.myproject.JavierCifuentes.Presentation.Navigation.recetasListScreen2
+import com.myproject.JavierCifuentes.Presentation.ViewModels.LoginViewModel
 import com.myproject.JavierCifuentes.ui.theme.ReceFacilTheme
 
 class MainActivity : ComponentActivity() {
@@ -79,4 +82,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

@@ -24,6 +24,7 @@ fun RecetaEntity.mapToModel(): Receta {
         nombre = nombre,
         descripcion = descripcion,
         imagenRes = imagenRes,
+        //TODO: use string resources
         ingredientes = ingredientes ?: "No se inseraron ingredientes",
         pasos = pasos ?: "No se insertaron pasos",
         isFavorite = this.isFavorite,

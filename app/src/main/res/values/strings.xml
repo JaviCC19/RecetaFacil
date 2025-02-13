@@ -3,5 +3,15 @@
     <string name="login">Login</string>
     <string name="password">Ingrese la contraseña</string>
     <string name="user">Ingrese su usuario</string>
-    <string name="Create">Crea tu nueva receta</string>
+    <string name="Filtro_temp">Filtra por tiempo</string>
+    <string name="intro">Introduccion</string>
+    <string name="ingredientes">Pasos de preparacion</string>
+    <string name="nombreReceta">Ingrese el nombre de su receta</string>
+    <string name="descripcionReceta">Escriba la descripcion de su receta</string>
+    <string name="ingredientesReceta">Ingrese sus ingredientes cada uno separado por comas</string>
+    <string name="pasosReceta">Ingrese los pasos para preparar su receta, separados por comas</string>
+    <string name="tiempoReceta">Ingrese el tiempo de preparacion (Minutos)</string>
+    <string name="guardarReceta">Guardar Receta</string>
+    <string name="Recetas">Recetas</string>
+    <string name="No_recipes">Aun no tienes recetas creadas</string>
 </resources>

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
@@ -59,6 +60,9 @@ fun RecetasRoute(
     val recetasFiltradas = uiState.recetas
         .filter { if (filtroFavoritos) it.isFavorite else true }
         .sortedBy { if (filtroTiempo) it.tiempo else it.nombre.length }
+    val onCerrarSesion: () -> Unit = {
+        viewModel.cerrarSesion()
+    }
 
     Column {
         if (recetasFiltradas.isEmpty()) {
@@ -67,12 +71,14 @@ fun RecetasRoute(
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
                     Text(
-                        text = "No hay recetas todavía",
+                        text = stringResource(R.string.No_recipes),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     Button(onClick = onCrearRecetaClick) {
+                        //TODO: change this to a resource
                         Text(text = "Crear nueva receta")
                     }
                 }
@@ -83,12 +89,12 @@ fun RecetasRoute(
                 onRecetaClick = onRecetaClick,
                 onToggleFavorite = { viewModel.toggleFavorite(it) },
                 onDeleteReceta = { viewModel.deleteReceta(it.id) },
-                modifier = modifier,
                 onFiltrarFavoritos = { viewModel.toggleFiltroFavoritos() },
                 onFiltrarTiempo = { viewModel.toggleFiltroPorTiempo() },
                 filtroFavoritosActivo = filtroFavoritos,
                 filtroTiempoActivo = filtroTiempo,
-                onCrearRecetaClick = onCrearRecetaClick
+                onCrearRecetaClick = onCrearRecetaClick,
+                onCerrarSesion = onCerrarSesion
             )
         }
     }
@@ -110,7 +116,7 @@ fun Filtros(
         Button(
             onClick = onFiltrarFavoritos,
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (filtroFavoritosActivo) Color.Green else Color.Gray
+                containerColor = if (filtroFavoritosActivo) MaterialTheme.colorScheme.onPrimaryContainer else Color.Gray
             )
         ) {
             Text(text = "Favoritos")
@@ -119,10 +125,10 @@ fun Filtros(
         Button(
             onClick = onFiltrarTiempo,
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (filtroTiempoActivo) Color.Green else Color.Gray
+                containerColor = if (filtroTiempoActivo) MaterialTheme.colorScheme.onPrimaryContainer else Color.Gray
             )
         ) {
-            Text(text = stringResource(R.string.Create))
+            Text(text = stringResource(R.string.Filtro_temp))
         }
     }
 }
@@ -134,22 +140,34 @@ fun RecetasScreen(
     onRecetaClick: (Int) -> Unit,
     onToggleFavorite: (Receta) -> Unit,
     onDeleteReceta: (Receta) -> Unit,
-    modifier: Modifier = Modifier,
     onFiltrarFavoritos: () -> Unit,
     onFiltrarTiempo: () -> Unit,
     filtroFavoritosActivo: Boolean,
     filtroTiempoActivo: Boolean,
-    onCrearRecetaClick: () -> Unit
+    onCrearRecetaClick: () -> Unit,
+    onCerrarSesion: () -> Unit
 ) {
     Scaffold(
         topBar = {
+
             TopAppBar(
-                title = { Text("Recetas") },
+                title = { Row(modifier = Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(stringResource(R.string.Recetas))
+
+                    IconButton(onClick = onCerrarSesion) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "Menú") }
+                }
+                   } ,
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                ),
+
+
             )
+
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -162,12 +180,11 @@ fun RecetasScreen(
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             Filtros(
-                onFiltrarFavoritos = { onFiltrarFavoritos() },
-                onFiltrarTiempo = { onFiltrarTiempo() },
+                onFiltrarFavoritos = onFiltrarFavoritos,
+                onFiltrarTiempo = onFiltrarTiempo,
                 filtroFavoritosActivo = filtroFavoritosActivo,
                 filtroTiempoActivo = filtroTiempoActivo
             )
-
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(recetas) { receta ->
                     RecetaCard(receta, onToggleFavorite, onDeleteReceta, onRecetaClick)
@@ -176,6 +193,7 @@ fun RecetasScreen(
         }
     }
 }
+
 
 
 @Composable

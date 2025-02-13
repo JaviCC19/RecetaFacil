@@ -17,7 +17,7 @@ fun NavGraphBuilder.loginScreen(
     composable<LoginDestination>{
         LoginRoute(
             onLoginClick = onLoginClick,
-            modifier = Modifier.fillMaxWidth()
+
 
         )
     }
