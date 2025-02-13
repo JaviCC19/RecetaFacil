@@ -1,5 +1,7 @@
 package com.myproject.JavierCifuentes.Presentation.ViewModels
 
+import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+
 import com.myproject.JavierCifuentes.Data.local.Dao.RecipieDAO
 import com.myproject.JavierCifuentes.Data.local.Domain.Receta
 import com.myproject.JavierCifuentes.Data.local.Entity.RecetaEntity
@@ -18,7 +21,11 @@ import com.myproject.JavierCifuentes.Presentation.States.CreateRecetaUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import com.myproject.JavierCifuentes.Data.local.Entity.mapToModel
+import com.myproject.JavierCifuentes.Data.local.Entity.mapToEntity
+import io.ktor.http.ContentDisposition.Companion.File
 import kotlinx.coroutines.launch
+import java.io.File
 
 class CreateRecetaViewModel(private val recetaRepository: RecetaRepository) : ViewModel() {
 
@@ -31,10 +38,6 @@ class CreateRecetaViewModel(private val recetaRepository: RecetaRepository) : Vi
 
     fun onDescripcionChange(newDescripcion: String) {
         _uiState.value = _uiState.value.copy(descripcion = newDescripcion)
-    }
-
-    fun onImagenResChange(newImagenRes: String) {
-        _uiState.value = _uiState.value.copy(imagenRes = newImagenRes.toIntOrNull() ?: 0)
     }
 
     fun onIngredientesChange(newIngredientes: String) {
@@ -53,6 +56,10 @@ class CreateRecetaViewModel(private val recetaRepository: RecetaRepository) : Vi
         _uiState.value = _uiState.value.copy(isFavorite = isFav)
     }
 
+    fun onImageSelected(uri: Uri) {
+        _uiState.value = _uiState.value.copy(imagenUri = uri.toString())
+    }
+
     fun saveReceta(onSuccess: () -> Unit) {
         if (_uiState.value.nombre.isEmpty()) {
             _uiState.value = _uiState.value.copy(errorMessage = "Debe ingresar un nombre para la receta")
@@ -65,7 +72,7 @@ class CreateRecetaViewModel(private val recetaRepository: RecetaRepository) : Vi
             val nuevaReceta = RecetaEntity(
                 nombre = _uiState.value.nombre,
                 descripcion = _uiState.value.descripcion,
-                imagenRes = _uiState.value.imagenRes,
+                imagenUri = "", // Se actualizará después
                 ingredientes = _uiState.value.ingredientes,
                 pasos = _uiState.value.pasos,
                 tiempo = _uiState.value.tiempo,
@@ -73,15 +80,23 @@ class CreateRecetaViewModel(private val recetaRepository: RecetaRepository) : Vi
             )
 
             recetaRepository.insertReceta(nuevaReceta)
+            val recetaId = recetaRepository.getUltimaRecetaId()
+
+            _uiState.value.imagenUri?.let { uri ->
+                recetaRepository.actualizarImagenReceta(recetaId, uri)
+            }
 
             _uiState.value = _uiState.value.copy(isSaving = false)
             onSuccess()
         }
     }
 
+
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
     }
+
+
 
 
     companion object {

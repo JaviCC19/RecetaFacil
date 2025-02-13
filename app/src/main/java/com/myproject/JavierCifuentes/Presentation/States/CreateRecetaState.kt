@@ -3,7 +3,7 @@ package com.myproject.JavierCifuentes.Presentation.States
 data class CreateRecetaUiState(
     val nombre: String = "",
     val descripcion: String = "",
-    val imagenRes: Int = 0,
+    val imagenUri: String = "",
     val ingredientes: String = "",
     val pasos: String = "",
     val tiempo: Int = 0,

@@ -1,9 +1,14 @@
 package com.myproject.JavierCifuentes.Presentation.Screens
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -14,19 +19,21 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.text.input.TextFieldValue
-import com.myproject.JavierCifuentes.Data.local.DataStore.DataStoreManager
-import com.myproject.JavierCifuentes.Data.local.Domain.Receta
+import coil.compose.rememberAsyncImagePainter
+import com.myproject.JavierCifuentes.Domain.Util.copyImageToInternalStorage
 import com.myproject.JavierCifuentes.Presentation.States.CreateRecetaUiState
 import com.myproject.JavierCifuentes.Presentation.ViewModels.CreateRecetaViewModel
 import com.myproject.JavierCifuentes.R
-import kotlinx.coroutines.launch
+
+
+
+
 
 @Composable
 fun CrearRecetaRoute(
@@ -36,9 +43,19 @@ fun CrearRecetaRoute(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { selectedUri ->
+            val savedPath = copyImageToInternalStorage(context, selectedUri)
+            savedPath?.let { viewModel.onImageSelected(Uri.parse(it)) }
+
+        }
+    }
+
     LaunchedEffect(uiState.errorMessage) {
-        uiState.errorMessage?.let {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+        uiState.errorMessage?.let { error ->
+            Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
             viewModel.clearError()
         }
     }
@@ -47,24 +64,26 @@ fun CrearRecetaRoute(
         uiState = uiState,
         onNombreChange = viewModel::onNombreChange,
         onDescripcionChange = viewModel::onDescripcionChange,
-        onImagenResChange = viewModel::onImagenResChange,
         onIngredientesChange = viewModel::onIngredientesChange,
         onPasosChange = viewModel::onPasosChange,
         onTiempoChange = viewModel::onTiempoChange,
         onFavoriteChange = viewModel::onFavoriteChange,
+        onImageSelected = { launcher.launch("image/*") },
         onSave = { viewModel.saveReceta(onNavigateBack) }
     )
 }
+
+
 @Composable
 fun CrearRecetaScreen(
     uiState: CreateRecetaUiState,
     onNombreChange: (String) -> Unit,
     onDescripcionChange: (String) -> Unit,
-    onImagenResChange: (String) -> Unit,
     onIngredientesChange: (String) -> Unit,
     onPasosChange: (String) -> Unit,
     onTiempoChange: (String) -> Unit,
     onFavoriteChange: (Boolean) -> Unit,
+    onImageSelected: () -> Unit,
     onSave: () -> Unit
 ) {
     Column(
@@ -74,6 +93,25 @@ fun CrearRecetaScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        uiState.imagenUri?.let { uri ->
+            Image(
+                painter = rememberAsyncImagePainter(model = uri.toString()),
+                contentDescription = "Imagen seleccionada",
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = onImageSelected) {
+            Text(text = "Seleccionar Imagen")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         TextField(
             value = uiState.nombre,
             onValueChange = onNombreChange,
@@ -88,17 +126,6 @@ fun CrearRecetaScreen(
             onValueChange = onDescripcionChange,
             label = { Text(stringResource(R.string.descripcionReceta)) },
             modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            value = uiState.imagenRes.toString(),
-            onValueChange = onImagenResChange,
-            //TODO: take out dummy data
-            label = { Text("ID de imagen (Int)") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -123,7 +150,11 @@ fun CrearRecetaScreen(
 
         TextField(
             value = uiState.tiempo.toString(),
-            onValueChange = onTiempoChange,
+            onValueChange = { newValue ->
+                if (newValue.all { it.isDigit() }) {
+                    onTiempoChange(newValue)
+                }
+            },
             label = { Text(stringResource(R.string.tiempoReceta)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -136,7 +167,6 @@ fun CrearRecetaScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            //TODO: use string resources
             Text("Favorito")
             Switch(
                 checked = uiState.isFavorite,

@@ -22,9 +22,18 @@ interface RecipieDAO {
     suspend fun getRecetaById(id: Int): RecetaEntity?
 
     @Insert
-    suspend fun insertReceta(receta: RecetaEntity)
+    suspend fun insertReceta(receta: RecetaEntity): Long
 
     @Update
     suspend fun updateReceta(receta: RecetaEntity)
+
+    @Query("UPDATE recetaentity SET imagenUri = :uri WHERE id = :id")
+    suspend fun actualizarImagen(id: Int, uri: String)
+
+
+    @Query("SELECT id FROM recetaentity ORDER BY id DESC LIMIT 1")
+    suspend fun getUltimaRecetaId(): Int
+
+
 
 }

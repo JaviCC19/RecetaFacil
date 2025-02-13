@@ -14,4 +14,9 @@
     <string name="guardarReceta">Guardar Receta</string>
     <string name="Recetas">Recetas</string>
     <string name="No_recipes">Aun no tienes recetas creadas</string>
+    <string name="filtro_Favoritos">Favoritos</string>
+    <string name="cerrarSesion">Cerrar sesion</string>
+    <string name="pasos">Los pasos para crear esta receta son:</string>
+    <string name="crearReceta">Empieza a crear tus recetas</string>
+    <string name="no_favoritos">Aun no tienes recetas en favoritos</string>
 </resources>

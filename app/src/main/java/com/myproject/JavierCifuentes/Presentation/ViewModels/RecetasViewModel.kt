@@ -48,6 +48,9 @@ class RecetasViewModel(
     private val _filtroTiempo = MutableStateFlow(false)
     val filtroTiempo = _filtroTiempo.asStateFlow()
 
+    private val _menuExpanded = MutableStateFlow(false)
+    val menuExpanded = _menuExpanded.asStateFlow()
+
     fun toggleFavorite(receta: Receta) {
         viewModelScope.launch {
             recetaDao.updateReceta(receta.copy(isFavorite = !receta.isFavorite).mapToEntity())
@@ -62,7 +65,15 @@ class RecetasViewModel(
         _filtroTiempo.value = !_filtroTiempo.value
     }
 
+    fun toggleMenu() {
+        _menuExpanded.value = !_menuExpanded.value
+    }
 
+    fun cerrarSesion() {
+        viewModelScope.launch {
+            dataStoreManager.clearUserName()
+        }
+    }
 
     fun deleteReceta(id: Int) {
         viewModelScope.launch {
@@ -70,12 +81,6 @@ class RecetasViewModel(
         }
     }
 
-    fun cerrarSesion() {
-        viewModelScope.launch {
-            dataStoreManager.clearUserName()
-
-        }
-    }
 
 
 
