@@ -5,7 +5,7 @@
     <string name="user">Ingrese su usuario</string>
     <string name="Filtro_temp">Filtra por tiempo</string>
     <string name="intro">Introduccion</string>
-    <string name="ingredientes">Pasos de preparacion</string>
+    <string name="ingredientes">Ingredientes para esta receta:</string>
     <string name="nombreReceta">Ingrese el nombre de su receta</string>
     <string name="descripcionReceta">Escriba la descripcion de su receta</string>
     <string name="ingredientesReceta">Ingrese sus ingredientes cada uno separado por comas</string>
