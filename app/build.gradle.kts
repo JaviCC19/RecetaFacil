@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.crashlytics)
+
+    id("com.google.gms.google-services")
     id("kotlin-kapt")
 }
 
@@ -74,6 +76,7 @@ dependencies {
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation(libs.androidx.room.ktx)
     implementation(libs.bundles.ktor)
     implementation(libs.coil.compose)

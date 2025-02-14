@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451653239201",
+    "project_id": "recefacil-1a1f6",
+    "storage_bucket": "recefacil-1a1f6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451653239201:android:6fad9884b39b6d7c980be0",
+        "android_client_info": {
+          "package_name": "com.myproject.JavierCifuentes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCva9IHu_Xm6u4uOpkXt-7aR1RLJgkozuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
