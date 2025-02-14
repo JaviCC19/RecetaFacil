@@ -41,14 +41,7 @@ La aplicación utiliza `NavHost` para gestionar la navegación entre pantallas. 
 - `RecetaDetailScreen`: Detalle de una receta.
 - `CrearRecetaScreen`: Crear una nueva receta.
 
-### ViewModels
 
-La aplicación utiliza `ViewModel` para gestionar el estado de la UI y la lógica de negocio. Los principales `ViewModels` incluyen:
-
-- `LoginViewModel`: Gestiona el estado de la pantalla de inicio de sesión.
-- `RecetasViewModel`: Gestiona el estado de la lista de recetas.
-- `RecetasDetailViewModel`: Gestiona el estado del detalle de una receta.
-- `CreateRecetaViewModel`: Gestiona el estado de la creación de una nueva receta.
 
 ### Temas
 
